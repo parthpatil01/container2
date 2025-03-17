@@ -27,7 +27,7 @@ app.post('/calculate', (req, res) => {
         return res.status(400).json({ file, error: 'Input file not in CSV format.' });
     }
 
-    console.log("latest update")
+    console.log("latest update container2");
 
     const results = [];
     fs.createReadStream(filePath)
