@@ -20,3 +20,8 @@ steps:
 
 images:
 - 'us-central1-docker.pkg.dev/assignment-454016/my-repo/container2:latest'
+
+# Add service account and logging configuration
+options:
+  logging: CLOUD_LOGGING_ONLY # Use Cloud Logging for logs
+serviceAccount: 'projects/assignment-454016/serviceAccounts/989799982951-compute@developer.gserviceaccount.com'
