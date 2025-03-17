@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-1gb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: container1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: container1
+  template:
+    metadata:
+      labels:
+        app: container1
+    spec:
+      containers:
+      - name: container1
+        image: gcr.io/your-project-id/container1:latest
+        volumeMounts:
+        - mountPath: "/yourname_PV_dir"
+          name: persistent-volume
+      volumes:
+      - name: persistent-volume
+        persistentVolumeClaim:
+          claimName: pvc-1gb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: container1-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 5000
+  selector:
+    app: container1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: container2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: container2
+  template:
+    metadata:
+      labels:
+        app: container2
+    spec:
+      containers:
+      - name: container2
+        image: gcr.io/your-project-id/container2:latest
+        volumeMounts:
+        - mountPath: "/yourname_PV_dir"
+          name: persistent-volume
+      volumes:
+      - name: persistent-volume
+        persistentVolumeClaim:
+          claimName: pvc-1gb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: container2-service
+spec:
+  ports:
+  - port: 5001
+    targetPort: 5001
+  selector:
+    app: container2

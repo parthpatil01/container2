@@ -1,0 +1,22 @@
+steps:
+# Step 1: Build Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/your-project-id/container1:latest', '.']
+
+# Step 2: Push Docker image to Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/your-project-id/container1:latest']
+
+# Step 3: Authenticate kubectl with GKE
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1']
+
+# Step 4: Deploy Kubernetes manifests
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['apply', '-f', 'deployment.yaml']
+  env:
+    - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=my-gke-cluster'
+
+images:
+- 'gcr.io/your-project-id/container1:latest'
