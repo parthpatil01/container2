@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: container1
-        image: gcr.io/assignment-454016/my-repo/container1:latest
+        image: us-central1-docker.pkg.dev/assignment-454016/my-repo/container2:latest
         volumeMounts:
         - mountPath: "/parth_PV_dir"
           name: persistent-volume
@@ -62,7 +62,7 @@ spec:
     spec:
       containers:
       - name: container2
-        image: gcr.io/assignment-454016/my-repo/container2:latest
+        image: us-central1-docker.pkg.dev/assignment-454016/my-repo/container2:latest
         volumeMounts:
         - mountPath: "/parth_PV_dir"
           name: persistent-volume
