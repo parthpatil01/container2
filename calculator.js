@@ -27,6 +27,8 @@ app.post('/calculate', (req, res) => {
         return res.status(400).json({ file, error: 'Input file not in CSV format.' });
     }
 
+    // running a test
+
     const results = [];
     fs.createReadStream(filePath)
         .pipe(csv({ headers: ['product', 'amount'], skipLines: 0 }))
