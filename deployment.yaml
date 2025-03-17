@@ -26,6 +26,7 @@ spec:
       containers:
       - name: container1
         image: us-central1-docker.pkg.dev/assignment-454016/my-repo/container1:latest
+        imagePullPolicy: Always
         volumeMounts:
         - mountPath: "/parth_PV_dir"
           name: persistent-volume
@@ -63,6 +64,7 @@ spec:
       containers:
       - name: container2
         image: us-central1-docker.pkg.dev/assignment-454016/my-repo/container2:latest
+        imagePullPolicy: Always
         volumeMounts:
         - mountPath: "/parth_PV_dir"
           name: persistent-volume
