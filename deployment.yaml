@@ -25,9 +25,9 @@ spec:
     spec:
       containers:
       - name: container1
-        image: gcr.io/your-project-id/container1:latest
+        image: gcr.io/assignment-454016/container1:latest
         volumeMounts:
-        - mountPath: "/yourname_PV_dir"
+        - mountPath: "/parth_PV_dir"
           name: persistent-volume
       volumes:
       - name: persistent-volume
@@ -62,9 +62,9 @@ spec:
     spec:
       containers:
       - name: container2
-        image: gcr.io/your-project-id/container2:latest
+        image: gcr.io/assignment-454016/container2:latest
         volumeMounts:
-        - mountPath: "/yourname_PV_dir"
+        - mountPath: "/parth_PV_dir"
           name: persistent-volume
       volumes:
       - name: persistent-volume

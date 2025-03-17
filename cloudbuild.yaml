@@ -1,11 +1,11 @@
 steps:
 # Step 1: Build Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/your-project-id/container1:latest', '.']
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/assignment-454016/my-repo/container2:latest', '.']
 
 # Step 2: Push Docker image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/your-project-id/container1:latest']
+  args: ['push', 'us-central1-docker.pkg.dev/assignment-454016/my-repo/container2:latest']
 
 # Step 3: Authenticate kubectl with GKE
 - name: 'gcr.io/cloud-builders/gcloud'
@@ -19,4 +19,4 @@ steps:
     - 'CLOUDSDK_CONTAINER_CLUSTER=my-gke-cluster'
 
 images:
-- 'gcr.io/your-project-id/container1:latest'
+- 'us-central1-docker.pkg.dev/assignment-454016/my-repo/container2:latest'
