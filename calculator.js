@@ -22,6 +22,11 @@ app.post('/calculate', (req, res) => {
         return res.status(404).json({ file, error: 'File not found.' });
     }
 
+    // Check if the file has a .csv extension
+    if (path.extname(filePath).toLowerCase() !== '.csv') {
+        return res.status(400).json({ file, error: 'Input file not in CSV format.' });
+    }
+
     const results = [];
     fs.createReadStream(filePath)
         .pipe(csv({ headers: ['product', 'amount'], skipLines: 0 }))
