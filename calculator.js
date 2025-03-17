@@ -10,6 +10,7 @@ const PV_DIR = '/parth_PV_dir';
 
 // Endpoint to calculate product total
 app.post('/calculate', (req, res) => {
+    console.log("inside container 2")
    
     const { file, product } = req.body;
 
