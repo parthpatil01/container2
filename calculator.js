@@ -54,7 +54,8 @@ app.post('/calculate', (req, res) => {
                     .filter((row) => row.product === product)
                     .reduce((sum, row) => sum + parseInt(row.amount), 0);
 
-                res.json({ file, sum: total });
+                if (sum==0)  res.status(400).json({ file, sum: 0, error: 'Input file not in CSV format.' });   
+                else res.json({ file, sum: total });
             } catch (error) {
                 res.status(400).json({ file, sum: 0, error: 'Input file not in CSV format.' });
             }
