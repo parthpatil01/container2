@@ -10,15 +10,18 @@ const PV_DIR = '/parth_PV_dir';
 
 // Endpoint to calculate product total
 app.post('/calculate', (req, res) => {
-    console.log("inside container 2")
+    console.log("inside container 2");
    
     const { file, product } = req.body;
+    console.log(file)
+    console.log(product)
 
     if (!file || !product) {
         return res.status(400).json({ file: null, error: 'Invalid JSON input.' });
     }
 
     const filePath = path.join(PV_DIR, file);
+    console.log(filePath)
 
     if (!fs.existsSync(filePath)) {
         return res.status(404).json({ file, error: 'File not found.' });
