@@ -27,26 +27,66 @@ app.post('/calculate', (req, res) => {
         return res.status(404).json({ file, error: 'File not found.' });
     }
 
-    // Check if the file has a .csv extension
-    if (path.extname(filePath).toLowerCase() !== '.csv') {
-        return res.status(400).json({ file, error: 'Input file not in CSV format.' });
-    }
+    // Read the file content first
+    fs.readFile(filePath, 'utf8', (err, fileContent) => {
+        if (err) {
+            return res.status(500).json({ file, error: 'Error reading file.' });
+        }
+        
+        // Simple validation to check if content appears to be CSV
+        // Check if there are commas and if structure seems consistent
+        const lines = fileContent.trim().split('\n');
+        if (lines.length === 0) {
+            return res.status(400).json({ file, error: 'Input file not in CSV format.' });
+        }
+        
+        // Check if each line has at least one comma (CSV should have separators)
+        const hasValidFormat = lines.every(line => line.includes(','));
+        if (!hasValidFormat) {
+            return res.status(400).json({ file, error: 'Input file not in CSV format.' });
+        }
+        
+        // If basic validation passes, proceed with parsing
+        const results = [];
+        let responseHasBeenSent = false;
+        
+        fs.createReadStream(filePath)
+            .pipe(csv({ headers: ['product', 'amount'], skipLines: 0 }))
+            .on('data', (data) => {
+                // Extra validation: check if data has the expected structure
+                if (!data.product || !data.amount || isNaN(parseInt(data.amount))) {
+                    if (!responseHasBeenSent) {
+                        responseHasBeenSent = true;
+                        return res.status(400).json({ file, error: 'Input file not in CSV format.' });
+                    }
+                }
+                results.push(data);
+            })
+            .on('error', (error) => {
+                if (!responseHasBeenSent) {
+                    responseHasBeenSent = true;
+                    return res.status(400).json({ file, error: 'Input file not in CSV format.' });
+                }
+            })
+            .on('end', () => {
+                if (responseHasBeenSent) return;
+                
+                try {
+                    // If we have no results, it's likely not a valid CSV with the expected format
+                    if (results.length === 0) {
+                        return res.status(400).json({ file, error: 'Input file not in CSV format.' });
+                    }
+                    
+                    const total = results
+                        .filter((row) => row.product === product)
+                        .reduce((sum, row) => sum + parseInt(row.amount), 0);
 
-    const results = [];
-    fs.createReadStream(filePath)
-        .pipe(csv({ headers: ['product', 'amount'], skipLines: 0 }))
-        .on('data', (data) => results.push(data))
-        .on('end', () => {
-            try {
-                const total = results
-                    .filter((row) => row.product === product)
-                    .reduce((sum, row) => sum + parseInt(row.amount), 0);
-
-                res.json({ file, sum: total });
-            } catch (error) {
-                res.status(400).json({ file, error: 'Input file not in CSV format.' });
-            }
-        });
+                    res.json({ file, sum: total });
+                } catch (error) {
+                    res.status(400).json({ file, error: 'Input file not in CSV format.' });
+                }
+            });
+    });
 });
 
 const PORT = 5001;
