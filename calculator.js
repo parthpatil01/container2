@@ -20,7 +20,8 @@ app.post('/calculate', (req, res) => {
         return res.status(400).json({ file: null, error: 'Invalid JSON input.' });
     }
 
-    // cloud build demonstration
+
+    // demonstration if ci/cd cloud build
 
     const filePath = path.join(PV_DIR, file);
     console.log(filePath)
