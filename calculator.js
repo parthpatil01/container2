@@ -20,9 +20,6 @@ app.post('/calculate', (req, res) => {
         return res.status(400).json({ file: null, error: 'Invalid JSON input.' });
     }
 
-
-    // demostration of ci/cd cloud build
-
     const filePath = path.join(PV_DIR, file);
     console.log(filePath)
 
@@ -69,3 +66,6 @@ const PORT = 5001;
 app.listen(PORT, () => {
     console.log(`Container 2 running on port ${PORT}`);
 });
+
+
+// CI/CD pipeline
