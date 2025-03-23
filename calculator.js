@@ -21,7 +21,7 @@ app.post('/calculate', (req, res) => {
     }
 
 
-    // demonstration if ci/cd cloud build
+    // demostration of ci/cd cloud build
 
     const filePath = path.join(PV_DIR, file);
     console.log(filePath)
